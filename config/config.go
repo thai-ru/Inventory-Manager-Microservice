@@ -52,7 +52,7 @@ func LoadConfig(env string) (*AppConfig, error) {
 			return nil, fmt.Errorf("invalid APP_PORT: %s", port)
 		}
 	} else {
-		config.App.Port = 50051 // Default port
+		config.App.Port = 50071 // Default port
 	}
 
 	return config, nil

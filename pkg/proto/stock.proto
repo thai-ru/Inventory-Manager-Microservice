@@ -1,0 +1,45 @@
+syntax = "proto3";
+package inventory;
+option go_package = "./pb";
+
+message StockLevel {
+  string product_id = 1;
+  int64 quantity = 2;
+  int64 min_threshold = 3;
+  int64 max_threshold = 4;
+}
+
+message AddStockLevelRequest {
+  string product_id = 1;
+  StockLevel stockLevel = 2;
+}
+
+message AddStockLevelResponse {
+  string message = 1;
+  StockLevel stockLevel = 2;
+}
+
+message GetStockLevelRequest {
+  string product_id = 1;
+}
+
+message GetStockLevelResponse {
+  string message = 1;
+  StockLevel stockLevel = 2;
+}
+
+message UpdateStockLevelRequest {
+  string product_id = 1;
+  StockLevel stockLevel = 2;
+}
+
+message UpdateStockLevelResponse {
+  string message = 1;
+  StockLevel stockLevel = 2;
+}
+
+service StockLevels {
+  rpc AddStockLevel(AddStockLevelRequest) returns (AddStockLevelResponse){}
+  rpc GetStockLevel(GetStockLevelRequest) returns (GetStockLevelResponse){}
+  rpc UpdateStockLevel(UpdateStockLevelRequest) returns (GetStockLevelResponse){}
+}
