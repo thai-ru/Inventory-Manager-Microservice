@@ -5,7 +5,6 @@ import (
 	"Inventory_Microservice/internal/stock_level_service/repository"
 	"Inventory_Microservice/pkg/pb"
 	"context"
-	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
@@ -23,8 +22,10 @@ func NewStockServer(store repository.StockRepository) *StockServer {
 func (s StockServer) AddStockLevel(ctx context.Context, req *pb.AddStockLevelRequest) (*pb.AddStockLevelResponse, error) {
 	log.Println("<<<<<<<>>> AddStock Request <<<>>>>>>")
 
-	if req.StockLevel.ProductId == "" {
-		fmt.Println("Product ID is required!")
+	if req.StockLevel.ProductId == "" || req.StockLevel.ProductId == " " {
+		errMsg := "Product ID is required!"
+		log.Println(errMsg)
+		return nil, status.Errorf(codes.InvalidArgument, errMsg)
 	}
 
 	stockLevel := &model.StockLevel{
