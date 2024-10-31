@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package inventory;
+option go_package = "./pb";
+
+message Product {
+  string id = 1;
+  string product_name = 2;
+  string category = 3;
+  string description = 4;
+  float base_price = 5;
+}
+
+message CreateProductRequest {
+  Product product = 1;
+}
+
+message CreateProductResponse {
+  string message = 1;
+  Product product = 2;
+}
+
+message GetProductRequest {
+  string product_id = 1;
+}
+message GetProductResponse {
+  string message = 1;
+  Product product = 2;
+}
+
+message GetProductsRequest {
+
+}
+
+message GetProductsResponse {
+  repeated Product products = 1;
+}
+
+message UpdateProductRequest {
+  string product_id = 1;
+}
+
+message UpdateProductResponse {
+  string message = 1;
+  Product product = 2;
+}
+
+message DeleteProductRequest {
+  string product_id = 1;
+  string product_name = 2;
+}
+
+message DeleteProductResponse {
+  string message = 1;
+  bool status = 2;
+}
+
+service InventoryManager {
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse){}
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse){}
+  rpc GetProducts(GetProductsRequest) returns (GetProductsResponse){}
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse){}
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse){}
+}
