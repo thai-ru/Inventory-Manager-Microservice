@@ -21,7 +21,7 @@ func NewProductServer(store repository.ProductRepository) *ProductServer {
 }
 
 func (s ProductServer) CreateProduct(ctx context.Context, req *pb.CreateProductRequest) (*pb.CreateProductResponse, error) {
-	log.Print(">>>>>> CreateProduct request <<<<<<<<")
+	log.Print("<<<<<<<>>>>>> CreateProduct request <<<<<<<<>>>>>>>")
 
 	if req.Product.ProductName == "" && req.Product.BasePrice <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "Please make sure to include product name or a valid price ")
@@ -54,6 +54,6 @@ func (s ProductServer) CreateProduct(ctx context.Context, req *pb.CreateProductR
 		},
 	}
 
-	log.Printf("Product created successfully: %+v", response)
+	log.Printf("<<<<<<>>> Product created successfully: %+v", response)
 	return response, nil
 }

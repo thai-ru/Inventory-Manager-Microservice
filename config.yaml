@@ -2,16 +2,36 @@
 app:
   port: 50071               # Default gRPC server port
 
-database:
-  driver: "sqlite"          # Database driver: sqlite, postgres, etc.
-  source: "file:dev.db?cache=shared&mode=rwc"  # SQLite in development
+#database:
+#  driver: "sqlite"          # Database driver: sqlite, postgres, etc.
+#  source: "file:dev.db?cache=shared&mode=rwc"  # SQLite in development
+
+product_database:
+  driver: "sqlite"          # Database driver for product service
+  source: "file:product.db?cache=shared&mode=rwc"  # SQLite for product service in development
+
+stock_database:
+  driver: "sqlite"          # Database driver for stock service
+  source: "file:stock.db?cache=shared&mode=rwc"    # SQLite for stock service in development
 
 environments:
   development:
-    database:
+#    database:
+#      driver: "sqlite"
+#      source: "file:dev.db?cache=shared&mode=rwc"
+    product_database:
       driver: "sqlite"
-      source: "file:dev.db?cache=shared&mode=rwc"
+      source: "file:product.db?cache=shared&mode=rwc"
+    stock_database:
+      driver: "sqlite"
+      source: "file:stock.db?cache=shared&mode=rwc"
   production:
-    database:
+#    database:
+#      driver: "postgres"
+#      source: "host=prod-db user=prod password=prod dbname=inventory sslmode=disable"
+    product_database:
       driver: "postgres"
-      source: "host=prod-db user=prod password=prod dbname=inventory sslmode=disable"
+      source: "host=prod-db user=prod password=prod dbname=product_inventory sslmode=disable"
+    stock_database:
+      driver: "postgres"
+      source: "host=prod-db user=prod password=prod dbname=stock_inventory sslmode=disable"

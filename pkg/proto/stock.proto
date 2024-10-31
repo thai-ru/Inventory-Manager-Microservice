@@ -10,7 +10,6 @@ message StockLevel {
 }
 
 message AddStockLevelRequest {
-  string product_id = 1;
   StockLevel stockLevel = 2;
 }
 

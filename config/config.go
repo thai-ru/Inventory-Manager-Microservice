@@ -2,58 +2,56 @@
 package config
 
 import (
-	"fmt"
-	"log"
+	"gopkg.in/yaml.v2"
 	"os"
-	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
-type AppConfig struct {
-	App      AppSettings    `yaml:"app"`
-	Database DatabaseConfig `yaml:"database"`
+// Config holds the entire application configuration
+type Config struct {
+	App          AppConfig            `yaml:"app"`
+	ProductDB    DatabaseConfig       `yaml:"product_database"` // Renamed to clarify its purpose
+	StockDB      DatabaseConfig       `yaml:"stock_database"`   // Renamed to clarify its purpose
+	Environments map[string]EnvConfig `yaml:"environments"`     // Renamed for clarity
 }
 
-type AppSettings struct {
+// AppConfig holds application-specific configurations
+type AppConfig struct {
 	Port int `yaml:"port"`
 }
 
+// DatabaseConfig holds database connection details
 type DatabaseConfig struct {
-	Driver string `yaml:"driver"`
-	Source string `yaml:"source"`
+	Driver string `yaml:"driver"` // e.g., sqlite, postgres
+	Source string `yaml:"source"` // Database source string
 }
 
-func LoadConfig(env string) (*AppConfig, error) {
-	config := &AppConfig{}
+// EnvConfig holds environment-specific configurations
+type EnvConfig struct {
+	ProductDB DatabaseConfig `yaml:"product_database"`
+	StockDB   DatabaseConfig `yaml:"stock_database"`
+}
 
-	// Load .env variables
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using default environment variables")
+// LoadConfig loads the configuration based on the provided environment
+func LoadConfig(env string) (*Config, error) {
+	file, err := os.Open("config.yaml")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var cfg Config
+	decoder := yaml.NewDecoder(file)
+	if err := decoder.Decode(&cfg); err != nil {
+		return nil, err
 	}
 
-	// Override with environment variables
-	if driver := os.Getenv("DB_DRIVER"); driver != "" {
-		config.Database.Driver = driver
-	} else {
-		config.Database.Driver = "sqlite" // Default value
-	}
-
-	if source := os.Getenv("DB_SOURCE"); source != "" {
-		config.Database.Source = source
-	} else {
-		config.Database.Source = "file:dev.db?cache=shared&mode=rwc" // Default value
-	}
-
-	if port := os.Getenv("APP_PORT"); port != "" {
-		if p, err := strconv.Atoi(port); err == nil {
-			config.App.Port = p
-		} else {
-			return nil, fmt.Errorf("invalid APP_PORT: %s", port)
+	// If environment is specified, override default settings
+	if env != "" {
+		if envConfig, exists := cfg.Environments[env]; exists {
+			cfg.ProductDB = envConfig.ProductDB
+			cfg.StockDB = envConfig.StockDB
 		}
-	} else {
-		config.App.Port = 50071 // Default port
 	}
 
-	return config, nil
+	return &cfg, nil
 }
