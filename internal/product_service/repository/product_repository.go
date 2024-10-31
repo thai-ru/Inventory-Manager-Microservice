@@ -7,7 +7,7 @@ import (
 
 type ProductRepository interface {
 	Save(product *model.Product) error
-	FindByID(id string) (*model.Product, error)
+	//FindByID(id string) (*model.Product, error)
 }
 
 type DatabaseProductStore struct {

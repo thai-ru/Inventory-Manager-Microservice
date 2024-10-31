@@ -1,0 +1,17 @@
+# config.yaml
+app:
+  port: 50071               # Default gRPC server port
+
+database:
+  driver: "sqlite"          # Database driver: sqlite, postgres, etc.
+  source: "file:dev.db?cache=shared&mode=rwc"  # SQLite in development
+
+environments:
+  development:
+    database:
+      driver: "sqlite"
+      source: "file:dev.db?cache=shared&mode=rwc"
+  production:
+    database:
+      driver: "postgres"
+      source: "host=prod-db user=prod password=prod dbname=inventory sslmode=disable"
