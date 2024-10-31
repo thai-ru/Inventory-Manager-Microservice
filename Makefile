@@ -22,5 +22,5 @@ vet: fmt
 .PHONY:vet
 
 build: vet
-	go build person.go
+	go run cmd/server/main.go
 .PHONY:build

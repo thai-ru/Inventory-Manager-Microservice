@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"gorm.io/gorm"
@@ -7,7 +7,7 @@ import (
 
 type Product struct {
 	gorm.Model
-	Id          string
+	ID          string `gorm:"primaryKey"`
 	ProductName string
 	Category    string
 	Description string
