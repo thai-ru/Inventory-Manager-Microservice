@@ -19,3 +19,7 @@ func NewProductRepository(db *gorm.DB) *DatabaseProductStore {
 		DB: db,
 	}
 }
+
+func (p *DatabaseProductStore) Save(product *model.Product) error {
+	return p.DB.Create(product).Error
+}
